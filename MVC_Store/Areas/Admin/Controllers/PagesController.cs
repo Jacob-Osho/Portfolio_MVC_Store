@@ -34,7 +34,7 @@ namespace MVC_Store.Areas.Admin.Controllers
         [HttpPost]
         public ActionResult AddPage(PageVM model)
         {
-            int sortingAmount = 100;
+            
             //проверка модели на валидность
             if (!ModelState.IsValid)
             {
@@ -81,7 +81,7 @@ namespace MVC_Store.Areas.Admin.Controllers
                 dto.Slug = slug;
                 dto.Body = model.Body;
                 dto.HasSidebar = model.HasSidebar;
-                dto.Sorting = sortingAmount;
+                dto.Sorting = 100;
 
                 //сохроняем модель в  базу данных
                 db.Pages.Add(dto);
@@ -230,8 +230,31 @@ namespace MVC_Store.Areas.Admin.Controllers
             TempData["SM"] = "You have succesfully deleted page";
             return RedirectToAction("Index");
         }
+        //creating sort method
+        // GET: Admin/Pages/ReorderPages
+        [HttpPost]
+        public void ReorderPages(int[] id)
+        {
+            using(Db db = new Db())
+            {
 
-        
+            
+            //счетчик
+            int count = 1;//еденица потому что хоум мы не будем сортировать
+
+             //иннициализируем модель данных
+                PagesDTO dto;
+            
+            //устанавливаем сортировку для каждой страницы
+            foreach(var pageId in id)
+                {
+                    dto = db.Pages.Find(pageId);
+                    dto.Sorting = count;
+                    db.SaveChanges();
+                    count++;
+                }
+            }
+        }
     }
 
     
