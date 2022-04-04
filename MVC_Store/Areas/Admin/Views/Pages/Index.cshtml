@@ -13,10 +13,18 @@
     </div>
 }
 
-<p>
-    @Html.ActionLink("Create New Page", "AddPage", "", new { @class = "btn btn-success" })
-</p>
-<table class="table">
+<a>
+    @Html.ActionLink("Create New Page", "AddPage", "", new { @class = "btn btn-success" }) <!--3-->
+</a>
+@*@if (Model.Any())
+    {
+        <h1 class="text.center">There are no pages</h1>
+    }
+    else
+    {}*@
+<!--5-->
+<table class="table sorting" id="pages">
+    <!--3-->
     <tr>
         <th>
             Title
@@ -31,8 +39,8 @@
     </tr>
 
     @foreach (var item in Model)
-    {
-        <tr>
+    {<!--5-->
+        <tr id="id_@item.Id" class="@item.Slug">
             <td>
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
@@ -52,7 +60,7 @@
                     @slash;
                     @Html.ActionLink("Delete", "DeletePage", new { id = item.Id }, new { @class = "delete" })
                 }
-                
+
 
             </td>
         </tr>
@@ -60,16 +68,29 @@
 
 </table>
 
+
 @section Scripts
 {
     <script>
-        $(function ()
-        {
+        $(function () {
             /*Confirm Page delition*/
 
             $("a.delete").click(function () {
                 if (!confirm("Confirm page deletion")) return false;
             });
-         });
+            //----------------------------
+            // sorting Script
+
+            $("table#pages tbody").sortable(
+                {
+                    items: "tr:not(.home)",
+                    placeholder: "ui-state-highlight",
+                    update: function () {
+                        var ids = $("table#pages tbody").sortable("serialize");
+                        console.log(ids);
+                    }
+
+                });
+        });
     </script>
 }
