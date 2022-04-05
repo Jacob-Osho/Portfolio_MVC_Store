@@ -11,5 +11,8 @@ namespace MVC_Store.Models.Data
         public DbSet<PagesDTO> Pages { get; set; }
         //6
         public DbSet<SideBarDTO> Sidebras { get; set; }
+        //8
+        public DbSet<CategoryDTO> Categories { get; set; }
+
     }
 }
