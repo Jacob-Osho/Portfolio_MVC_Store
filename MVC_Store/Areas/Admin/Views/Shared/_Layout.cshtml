@@ -11,7 +11,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
         <div class="container-fluid">
-            @Html.ActionLink("Dashbord", "Index", "Dashbord","", new { @class = "navbar-brand" })
+            @Html.ActionLink("Dashbord", "Index", "Dashbord", "", new { @class = "navbar-brand" })
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -28,13 +28,13 @@
                     </li>
                 </ul>
                 @*New Right Menu*@
-            <ul class="navbar-nav my-2 my-sm-0 ">
-                <!--<ul class="navbar-nav m-lg-auto">-->
-                @*добовляем в правое меню*@
-                <li class="nav-item">
-                    <a href="/" class="navbar-brand" target="_blank">Cart</a>
-                </li>
-            </ul>
+                <ul class="navbar-nav my-2 my-sm-0 ">
+                    <!--<ul class="navbar-nav m-lg-auto">-->
+                    @*добовляем в правое меню*@
+                    <li class="nav-item">
+                        <a href="/" class="navbar-brand" target="_blank">Cart</a>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
@@ -48,10 +48,14 @@
 
     @Scripts.Render("~/bundles/jquery")
 
-    <!-- Connecting bundle to admin area -->
+    <!-- Connecting bundle to admin area 5 -->
     @Scripts.Render("~/bundles/jqueryui")
 
     @Scripts.Render("~/Scripts/bootstrap.js")
+
+    <!--7-->
+    @Scripts.Render("~/bundles/ckeditor")
+
     @RenderSection("scripts", required: false)
 </body>
 </html>

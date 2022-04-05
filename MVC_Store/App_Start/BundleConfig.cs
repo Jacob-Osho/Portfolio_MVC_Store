@@ -18,7 +18,6 @@ namespace MVC_Store
             bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
                         "~/Scripts/jquery-ui.js"));
 
-
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at https://modernizr.com to pick only the tests you need.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
@@ -31,6 +30,10 @@ namespace MVC_Store
                       "~/Content/bootstrap.css",
                       "~/Content/site.css",
                       "~/Content/jquery-ui.css"));
+
+            // adding lib - CKEditor (7)
+            bundles.Add(new ScriptBundle("~/bundles/ckeditor").Include(
+                     "~/Scripts/ckeditor/ckeditor.js"));
         }
     }
 }

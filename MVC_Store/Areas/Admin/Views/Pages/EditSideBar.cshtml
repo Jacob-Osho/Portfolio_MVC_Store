@@ -22,9 +22,9 @@
         @Html.HiddenFor(model => model.Id)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Body, htmlAttributes: new { @class = "control-label col-md-2" })
+            @*@Html.LabelFor(model => model.Body, htmlAttributes: new { @class = "control-label col-md-2" })*@
             <div class="col-md-10">
-                @Html.TextAreaFor(model => model.Body,  new { @class = "form-control" } )
+                @Html.TextAreaFor(model => model.Body, new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.Body, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -34,6 +34,17 @@
                 <input type="submit" value="Edit" class="btn btn-success" />
             </div>
         </div>
+        
     </div>
+
+    
 }
 
+
+<!--Replace Scipt-->
+@section Scripts
+{
+    <script>
+        CKEDITOR.replace("Body")
+    </script>
+}

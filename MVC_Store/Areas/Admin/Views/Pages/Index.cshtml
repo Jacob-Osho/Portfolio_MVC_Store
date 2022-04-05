@@ -55,14 +55,14 @@
                 @Html.DisplayFor(modelItem => item.HasSidebar)
             </td>
             <td>
-                @Html.ActionLink("Edit", "EditPage", new { id = item.Id }) |
-                @Html.ActionLink("Details", "PageDetails", new { id = item.Id }) |
+                @Html.ActionLink("Edit", "EditPage", new { id = item.Id },new { @class = "btn btn-success"}) 
+                @Html.ActionLink("Details", "PageDetails", new { id = item.Id }, new { @class = "btn btn-secondary" }) 
                 <!--if Slug == home no need to show delete buttom-->
                 @if (item.Slug != "home")
                 {
-                    string slash = "| ";
-                    @slash;
-                    @Html.ActionLink("Delete", "DeletePage", new { id = item.Id }, new { @class = "delete" })
+                    @*string slash = "| ";
+                    @slash;*@
+                    @Html.ActionLink("Delete", "DeletePage", new { id = item.Id }, new { @class = "btn btn-danger" })//new { @class = "delete" }
                 }
 
 
@@ -79,7 +79,7 @@
         $(function () {
             /*Confirm Page delition*/
 
-            $("a.delete").click(function () {
+            $("a.btn-danger").click(function () {
                 if (!confirm("Confirm page deletion")) return false;
             });
             //----------------------------
