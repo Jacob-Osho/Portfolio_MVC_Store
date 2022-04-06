@@ -13,6 +13,7 @@ namespace MVC_Store.Models.Data
         public DbSet<SideBarDTO> Sidebras { get; set; }
         //8
         public DbSet<CategoryDTO> Categories { get; set; }
-
+        //11
+        public DbSet<ProductDTO> Products { get; set; }
     }
 }

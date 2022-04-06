@@ -28,7 +28,7 @@ namespace MVC_Store.Areas.Admin.Controllers
             return View(categoryVMList);
         }
         //Метод Удаления страниц
-        // GET: Admin/Pages/DeleteCategory/id
+        // GET: Admin/Shop/DeleteCategory/id
         public ActionResult DeleteCategory(int id)
         {
             using (Db db = new Db())
@@ -115,7 +115,6 @@ namespace MVC_Store.Areas.Admin.Controllers
                 {
                     return "titletaken";
                 }
-
                 //получаем класс ДТО с бд
                 CategoryDTO dto = db.Categories.Find(id);
                 //редактируем модель ДТО
@@ -126,8 +125,23 @@ namespace MVC_Store.Areas.Admin.Controllers
                 db.SaveChanges();
             }
             //возвращаем слово
-                
             return "ok"; 
+        }
+        //11
+        //создаем метод добавления товаров
+        // GET: Admin/Shop/AddProduct
+        public ActionResult AddProduct()
+        {
+            //обьявляем модель данных
+            ProductVM model = new ProductVM();
+            // добавляем Список категорий из базы в модель
+            using(Db db = new Db())
+            {
+               model.Categories =  new SelectList(db.Categories.ToList(),"id","Name");
+              
+            }
+            // возвращаем модель
+            return View(model);
         }
     } 
 }
