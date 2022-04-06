@@ -81,7 +81,7 @@ namespace MVC_Store.Areas.Admin.Controllers
         }
 
         //9
-        // Post: Admin/Shop/ReorderCategories
+        // POST: Admin/Shop/ReorderCategories
         [HttpPost]
         public void ReorderCategories(int[] id)
         {
@@ -102,6 +102,32 @@ namespace MVC_Store.Areas.Admin.Controllers
                     count++;
                 }
             }
+        }
+        //10
+        // POST: Admin/Shop/RenameCategory/id
+        [HttpPost]
+        public string RenameCategory(string newCatName,int id)
+        {
+            //проверить имя на уникальность
+            using (Db db = new Db())
+            {
+                if(db.Categories.Any(x => x.Name == newCatName))
+                {
+                    return "titletaken";
+                }
+
+                //получаем класс ДТО с бд
+                CategoryDTO dto = db.Categories.Find(id);
+                //редактируем модель ДТО
+                dto.Name = newCatName;
+                dto.Slag = newCatName.Replace(" ", "-").ToLower();
+              
+                //сохранить изменения
+                db.SaveChanges();
+            }
+            //возвращаем слово
+                
+            return "ok"; 
         }
     } 
 }
