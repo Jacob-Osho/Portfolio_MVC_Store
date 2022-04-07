@@ -62,3 +62,7 @@ E:\Gitrepositories\Ishop\MVC_Store\MVC_Store\bin\EntityFramework.dll
 E:\Gitrepositories\Ishop\MVC_Store\MVC_Store\bin\EntityFramework.SqlServer.dll
 E:\Gitrepositories\Ishop\MVC_Store\MVC_Store\bin\EntityFramework.xml
 E:\Gitrepositories\Ishop\MVC_Store\MVC_Store\bin\EntityFramework.SqlServer.xml
+E:\Gitrepositories\Ishop\MVC_Store\MVC_Store\bin\PagedList.dll
+E:\Gitrepositories\Ishop\MVC_Store\MVC_Store\bin\PagedList.Mvc.dll
+E:\Gitrepositories\Ishop\MVC_Store\MVC_Store\bin\PagedList.xml
+E:\Gitrepositories\Ishop\MVC_Store\MVC_Store\bin\PagedList.Mvc.xml

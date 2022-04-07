@@ -1,5 +1,6 @@
 ﻿using MVC_Store.Models.Data;
 using MVC_Store.Models.ViewModels.Shop;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -277,5 +278,38 @@ namespace MVC_Store.Areas.Admin.Controllers
             return RedirectToAction("AddProduct");
 
         }
-    } 
+
+        //13(PageList.MVC)
+        //создаем   методсписка товаров
+        // GET: Admin/Shop/Products 
+        [HttpGet]
+        public ActionResult Products (int? page,int? catId)
+        {
+            int numberOfGoodsOnPage = 15;
+            //обьявить модель продакт ВМ (лист)
+            List<ProductVM> listOfProductVM;
+
+            //устанавливаем номер страницы
+            var pageNumber = page ?? 1;
+            using(Db db = new Db())
+            {
+                // инициализируем лист заполняем данными
+                listOfProductVM = db.Products.ToArray()
+                        .Where(x => catId == null || catId == 0 || x.CategoryId == catId)
+                        .Select(x => new ProductVM(x))
+                        .ToList(); 
+                //  запонляем категории данными
+                ViewBag.Categories = new SelectList(db.Categories.ToList(),"Id","Name");
+                // устанавливаем выбранную категорию
+                ViewBag.SelectedCat = catId.ToString();
+            }
+            //устанавливаем постраничную навигацию
+            var onePageOfProducts = listOfProductVM.ToPagedList(pageNumber, numberOfGoodsOnPage);
+            ViewBag.onePageOfProducts = onePageOfProducts;
+
+            // возвращаем все это в представление
+               return View(listOfProductVM);
+        }
+
+    }
 }
