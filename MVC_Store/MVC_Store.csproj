@@ -481,7 +481,6 @@
     <Content Include="Scripts\ckeditor\ckeditor_php4.php" />
     <Content Include="Scripts\ckeditor\ckeditor.php" />
     <Content Include="Scripts\ckeditor\ckeditor.pack" />
-    <Content Include="код для вставки в Config_js.txt" />
     <Content Include="fileman\asp_net\main.ashx" />
     <Content Include="fileman\conf.json" />
     <Content Include="fileman\lang\bg.json" />
