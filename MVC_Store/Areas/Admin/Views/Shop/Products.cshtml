@@ -65,13 +65,11 @@
              {
                  <img src="/Images/Uploads/Products/@product.Id/Thumbs/@product.ImageName" alt=" product img" />
              }
-
          </a>
      </td>
         <td>
                 @Html.ActionLink("Edit", "EditProduct", new { id = product.Id }, new { @class = "btn btn-success" })
-                @Html.ActionLink("Delete", "DeleteProduct", new { id = product.Id }, new { @class = "btn btn-danger" })
-                
+                @Html.ActionLink("Delete", "DeleteProduct", new { id = product.Id }, new { @class = "btn btn-danger delete" }) 
         </td>
   </tr>
     }

@@ -45,14 +45,14 @@ namespace MVC_Store.Areas.Admin.Controllers
                 // сохраняем изменения в базе
                 db.SaveChanges();
             }
-          
+
 
             //Оповесщаем пользователя о упешном сохронении  
             TempData["SM"] = "You have succesfully deleted page";
             //переадресовываем пользователя  на страницу категории
             return RedirectToAction("Categories");
         }
-      
+
         //9
         // POST: Admin/Shop/AddNewCategory
         [HttpPost]
@@ -60,15 +60,15 @@ namespace MVC_Store.Areas.Admin.Controllers
         {
             //обьявляем строковую прееменную айди
             string id;
-            using(Db db =new Db())
+            using (Db db = new Db())
             {
                 //провекра имя категории на уникальность
-                 if (db.Categories.Any(x => x.Name == catName))
-                 {
+                if (db.Categories.Any(x => x.Name == catName))
+                {
                     return "titletaken";
-                 }
+                }
                 //инициализируем модель ДТО
-                    CategoryDTO dto = new CategoryDTO();
+                CategoryDTO dto = new CategoryDTO();
                 //заполняем данными модель
                 dto.Name = catName;
                 dto.Slag = catName.Replace(" ", "-").ToLower();
@@ -109,12 +109,12 @@ namespace MVC_Store.Areas.Admin.Controllers
         //10
         // POST: Admin/Shop/RenameCategory/id
         [HttpPost]
-        public string RenameCategory(string newCatName,int id)
+        public string RenameCategory(string newCatName, int id)
         {
             //проверить имя на уникальность
             using (Db db = new Db())
             {
-                if(db.Categories.Any(x => x.Name == newCatName))
+                if (db.Categories.Any(x => x.Name == newCatName))
                 {
                     return "titletaken";
                 }
@@ -123,12 +123,12 @@ namespace MVC_Store.Areas.Admin.Controllers
                 //редактируем модель ДТО
                 dto.Name = newCatName;
                 dto.Slag = newCatName.Replace(" ", "-").ToLower();
-              
+
                 //сохранить изменения
                 db.SaveChanges();
             }
             //возвращаем слово
-            return "ok"; 
+            return "ok";
         }
         //11
         //создаем метод добавления товаров
@@ -139,10 +139,10 @@ namespace MVC_Store.Areas.Admin.Controllers
             //обьявляем модель данных
             ProductVM model = new ProductVM();
             // добавляем Список категорий из базы в модель
-            using(Db db = new Db())
+            using (Db db = new Db())
             {
-               model.Categories =  new SelectList(db.Categories.ToList(),"id","Name");
-              
+                model.Categories = new SelectList(db.Categories.ToList(), "id", "Name");
+
             }
             // возвращаем модель
             return View(model);
@@ -151,21 +151,21 @@ namespace MVC_Store.Areas.Admin.Controllers
         //создаем метод добавления товаров
         // POST: Admin/Shop/AddProduct
         [HttpPost]
-        public ActionResult AddProduct(ProductVM model,HttpPostedFileBase file)
+        public ActionResult AddProduct(ProductVM model, HttpPostedFileBase file)
         {
             //проверяем модель на валидность
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-               using(Db db=new Db())
+                using (Db db = new Db())
                 {
                     model.Categories = new SelectList(db.Categories.ToList(), "id", "Name");
-                    return View(model); 
+                    return View(model);
                 }
             }
             // проверяем имя продукта на уникальность
-            using(Db db = new Db())
+            using (Db db = new Db())
             {
-                if (db.Products.Any(x =>x.Name == model.Name))
+                if (db.Products.Any(x => x.Name == model.Name))
                 {
                     ModelState.AddModelError("", "That product name is taken");
                     model.Categories = new SelectList(db.Categories.ToList(), "id", "Name");
@@ -175,17 +175,17 @@ namespace MVC_Store.Areas.Admin.Controllers
             // обьявляем прееменную продукт айди
             int id;
             // инициализируем и сохраняем в базу модель на основе продукт дто
-            using(Db db = new Db())
+            using (Db db = new Db())
             {
                 ProductDTO product = new ProductDTO();
                 product.Name = model.Name;
-                product.Slug = model.Name.Replace(" ","-").ToLower();
+                product.Slug = model.Name.Replace(" ", "-").ToLower();
                 product.Description = model.Description;
                 product.Price = model.Price;
                 product.CategoryId = model.CategoryId;
 
 
-                CategoryDTO catDTO = db.Categories.FirstOrDefault(x=>x.Id==model.CategoryId);
+                CategoryDTO catDTO = db.Categories.FirstOrDefault(x => x.Id == model.CategoryId);
                 product.CategoryName = catDTO.Name;
                 db.Products.Add(product);
                 db.SaveChanges();
@@ -199,8 +199,8 @@ namespace MVC_Store.Areas.Admin.Controllers
             // создаем ссылки директории
             var originalDirectory = new DirectoryInfo(string.Format($"{Server.MapPath(@"\")}Images\\Uploads"));
             var pathString1 = Path.Combine(originalDirectory.ToString(), "Products");
-            var pathString2 = Path.Combine(originalDirectory.ToString(), "Products\\"+id.ToString());
-            var pathString3 = Path.Combine(originalDirectory.ToString(), "Products\\" + id.ToString()+"\\Thumbs");
+            var pathString2 = Path.Combine(originalDirectory.ToString(), "Products\\" + id.ToString());
+            var pathString3 = Path.Combine(originalDirectory.ToString(), "Products\\" + id.ToString() + "\\Thumbs");
             var pathString4 = Path.Combine(originalDirectory.ToString(), "Products\\" + id.ToString() + "\\Gallery");
             var pathString5 = Path.Combine(originalDirectory.ToString(), "Products\\" + id.ToString() + "\\Gallery\\Thumbs");
 
@@ -269,7 +269,7 @@ namespace MVC_Store.Areas.Admin.Controllers
 
                 // создаем и сохроняем уменьшенную копию
                 WebImage img = new WebImage(file.InputStream);
-                img.Resize(200,200);
+                img.Resize(200, 200);
                 img.Save(path2);
             }
             #endregion
@@ -283,7 +283,7 @@ namespace MVC_Store.Areas.Admin.Controllers
         //создаем   методсписка товаров
         // GET: Admin/Shop/Products 
         [HttpGet]
-        public ActionResult Products (int? page,int? catId)
+        public ActionResult Products(int? page, int? catId)
         {
             int numberOfGoodsOnPage = 15;
             //обьявить модель продакт ВМ (лист)
@@ -291,15 +291,15 @@ namespace MVC_Store.Areas.Admin.Controllers
 
             //устанавливаем номер страницы
             var pageNumber = page ?? 1;
-            using(Db db = new Db())
+            using (Db db = new Db())
             {
                 // инициализируем лист заполняем данными
                 listOfProductVM = db.Products.ToArray()
                         .Where(x => catId == null || catId == 0 || x.CategoryId == catId)
                         .Select(x => new ProductVM(x))
-                        .ToList(); 
+                        .ToList();
                 //  запонляем категории данными
-                ViewBag.Categories = new SelectList(db.Categories.ToList(),"Id","Name");
+                ViewBag.Categories = new SelectList(db.Categories.ToList(), "Id", "Name");
                 // устанавливаем выбранную категорию
                 ViewBag.SelectedCat = catId.ToString();
             }
@@ -308,7 +308,7 @@ namespace MVC_Store.Areas.Admin.Controllers
             ViewBag.onePageOfProducts = onePageOfProducts;
 
             // возвращаем все это в представление
-               return View(listOfProductVM);
+            return View(listOfProductVM);
         }
 
         //14
@@ -319,12 +319,12 @@ namespace MVC_Store.Areas.Admin.Controllers
         {
             //обьявляем модель продактВМ
             ProductVM model;
-            using(Db db = new Db())
+            using (Db db = new Db())
             {
                 // получаем все поля продукта
                 ProductDTO dto = db.Products.Find(id);
                 // проверяем доступен ли продукт
-                if(dto == null)
+                if (dto == null)
                 {
                     return Content("That product does not exist");
                 }
@@ -332,11 +332,11 @@ namespace MVC_Store.Areas.Admin.Controllers
                 model = new ProductVM(dto);
 
                 // создаем список категорий
-                model.Categories = new SelectList(db.Categories.ToList(),"Id","Name");
+                model.Categories = new SelectList(db.Categories.ToList(), "Id", "Name");
 
                 // получаем все изороброжения 
                 model.GalleryImages = Directory
-                    .EnumerateFiles(Server.MapPath("~/Images/Uploads/Products/"+id+"/Gallery/Thumbs"))
+                    .EnumerateFiles(Server.MapPath("~/Images/Uploads/Products/" + id + "/Gallery/Thumbs"))
                     .Select(fn => Path.GetFileName(fn));
             }
             // возвращаем модель в представление
@@ -351,9 +351,9 @@ namespace MVC_Store.Areas.Admin.Controllers
             //получаем айди продукта
             int id = model.Id;
             //заполняем список категориями 
-            using(Db db = new Db())
+            using (Db db = new Db())
             {
-                model.Categories = new SelectList(db.Categories.ToList(),"Id","Name");
+                model.Categories = new SelectList(db.Categories.ToList(), "Id", "Name");
             }
 
             //заполняем список  изображеними
@@ -368,36 +368,139 @@ namespace MVC_Store.Areas.Admin.Controllers
             }
 
             //проверяем имя продукта на уникальность
-            using(Db db = new Db())
+            using (Db db = new Db())
             {
-                if(db.Products.Where(x =>x.Id != id)
-                    .Any(x=>x.Name==model.Name))
+                if (db.Products.Where(x => x.Id != id)
+                    .Any(x => x.Name == model.Name))
                 {
                     ModelState.AddModelError("", "That product name is already taken");
                     return View(model);
                 }
             }
             //обновляем продукт
-            using(Db db = new Db())
+            using (Db db = new Db())
             {
-               ProductDTO dto =db.Products.Find(id);
+                ProductDTO dto = db.Products.Find(id);
                 dto.Name = model.Name;
-                dto.Slug = model.Name.Replace(" ","-").ToLower();
+                dto.Slug = model.Name.Replace(" ", "-").ToLower();
                 dto.Description = model.Description;
                 dto.Price = model.Price;
                 dto.CategoryId = model.CategoryId;
                 dto.ImageName = model.ImageName;
-                CategoryDTO catDTO = db.Categories.FirstOrDefault(x=>x.Id == model.CategoryId);
+                CategoryDTO catDTO = db.Categories.FirstOrDefault(x => x.Id == model.CategoryId);
                 dto.CategoryName = catDTO.Name;
                 db.SaveChanges();
             }
             //установить сообщение в тэмп дейта
             TempData["SM"] = "You have edited  the product ";
             #region ImageUpload
-            //логика обработки изоброжения (15)
+            //15
+            // проверить загружен ли файл
+            if (file != null && file.ContentLength > 0)
+            {
+                // получить расширение файла
+                string ext = file.ContentType.ToLower();
+                // проверряем расширение
+                if (ext != "image/jpg" &&
+                   ext != "image/jpeg" &&
+                   ext != "image/pjpg" &&
+                   ext != "image/gif" &&
+                   ext != "image/x-jpg" &&
+                   ext != "image/png")
+                {
+                    using (Db db = new Db())
+                    {
+
+                        ModelState.AddModelError("", "The image was not uploaded! Wrong image extention");
+                        return View(model);
+                    }
+                }
+
+                // устанавливаем пути для загрузки
+                var originalDirectory = new DirectoryInfo(string.Format($"{Server.MapPath(@"\")}Images\\Uploads"));
+
+                var pathString1 = Path.Combine(originalDirectory.ToString(), "Products\\" + id.ToString());
+                var pathString2 = Path.Combine(originalDirectory.ToString(), "Products\\" + id.ToString() + "\\Thumbs");
+
+
+                //удаляем существующие файлы в дерикториях и папки
+                DirectoryInfo di1 = new DirectoryInfo(pathString1);
+                DirectoryInfo di2 = new DirectoryInfo(pathString2);
+                foreach (var file2 in di1.GetFiles())
+                {
+                    file2.Delete();
+
+                }
+                foreach (var file3 in di2.GetFiles())
+                {
+                    file3.Delete();
+
+                }
+                // сахроняем имя изоброжение
+                string imgName = file.FileName;
+
+
+                using (Db db = new Db())
+                {
+                    ProductDTO dto = db.Products.Find(id);
+                    dto.ImageName = imgName;
+                    db.SaveChanges();
+                }
+                // сохраняем оригинал и привью версии
+                string path = string.Format($"{pathString1}\\{imgName}");
+                string path2 = string.Format($"{pathString2}\\{imgName}");
+                //сохроняем оригинальное изображение
+                file.SaveAs(path);
+
+                // создаем и сохроняем уменьшенную копию
+                WebImage img = new WebImage(file.InputStream);
+                img.Resize(200, 200);
+                img.Save(path2);
+
+            }
+
+
             #endregion
             //переадресовать пользователя
             return RedirectToAction("EditProduct");
+        }
+
+        //15
+        //создаем метод удаления товаров
+        // POST: Admin/Shop/DeleteProduct/id
+        public ActionResult DeleteProduct(int id)
+        {
+            using (Db db = new Db())
+            {
+                //получаем данные страницы по айди
+                ProductDTO dto = db.Products.Find(id);
+
+                //удаляем  страницу
+                db.Products.Remove(dto);
+
+                // сохраняем изменения в базе
+                db.SaveChanges();
+            }
+            //удаляем директории товара (изоражения )
+            var originalDirectory = new DirectoryInfo(string.Format($"{Server.MapPath(@"\")}Images\\Uploads"));
+            var deleteDirPath = Path.Combine(originalDirectory.ToString(), "Products\\" + id.ToString());
+            try
+            {
+                if (Directory.Exists(deleteDirPath))
+                    Directory.Delete(deleteDirPath, true);
+            }
+            catch (Exception ex)
+            {
+                
+                TempData["SM"] = $" not fully deleted product {ex.Message}";
+                return RedirectToAction("Products");
+            }
+            
+            
+         
+            //Оповесщаем пользователя о упешном сохронении  
+            TempData["SM"] = "You have succesfully deleted product";
+            return RedirectToAction("Products");
         }
     }
 }

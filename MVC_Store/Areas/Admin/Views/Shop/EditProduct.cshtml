@@ -12,7 +12,7 @@
     </div>
 }
 
-@using (Html.BeginForm("EditProduct", "Shop", FormMethod.Post, new { ecntype = "multipart/form-data" }))
+@using (Html.BeginForm("EditProduct", "Shop", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
 
@@ -68,7 +68,7 @@
 
                 <img id="imgpreview" src="~/Content/img/no_image.png" height="80" alt="image" />
                 <div class="col-md-10">
-                    <input type="file" , name="file" id="imageUpload" />
+                    <input type="file"  name="file" id="imageUpload" />
                 </div>
 
             </div>
