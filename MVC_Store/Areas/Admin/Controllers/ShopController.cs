@@ -502,5 +502,56 @@ namespace MVC_Store.Areas.Admin.Controllers
             TempData["SM"] = "You have succesfully deleted product";
             return RedirectToAction("Products");
         }
+        //16
+        //создаем метод Добовления  изорожений в галереб
+        // POST: Admin/Shop/SaveGalleryImages/id
+
+        [HttpPost]
+        public void SaveGalleryImages(int id)
+        {
+            // перебираем все полученные файлы из представления
+            foreach (string fileName in Request.Files)
+            {
+                //инициализируем файлы
+                HttpPostedFileBase file = Request.Files[fileName];
+                // проверяем файлы на null
+                if (file != null && file.ContentLength > 0)
+                {
+                    // Назначаем пути к директориям
+                    var originalDirectory = new DirectoryInfo(string.Format($"{Server.MapPath(@"\")}Images\\Uploads"));
+                    var pathString1 = Path.Combine(originalDirectory.ToString(), "Products\\" + id.ToString() + "\\Gallery");
+                    var pathString2 = Path.Combine(originalDirectory.ToString(), "Products\\" + id.ToString() + "\\Gallery\\Thumbs");
+
+                    // Назначаем пути самих изоброжений
+                    var path1 = string.Format($"{pathString1}\\{file.FileName}");
+                    var path2 = string.Format($"{pathString2}\\{file.FileName}");
+              
+                    file.SaveAs(path1);
+                    // Сохроняем оригинальные и уменьшенные копии
+                    WebImage img = new WebImage(file.InputStream);
+                 
+                    img.Resize(200,200);
+                    img.Save(path2);
+                }
+            }
+        }
+
+        //метод удаления изобродений из галереи 16
+        // POST: Admin/Shop/DeleteImage/id/imageName
+        public void DeleteImage(int id , string imageName)
+        {
+            var fullPath1 = Request.MapPath("~/Images/Uploads/Products/"+id.ToString()+"/Gallery/"+ imageName);
+            var fullPath2 = Request.MapPath("~/Images/Uploads/Products/" + id.ToString() + "/Gallery/Thumbs/" + imageName);
+            if(System.IO.File.Exists(fullPath1))
+            {
+                System.IO.File.Delete(fullPath1);
+            }
+            if (System.IO.File.Exists(fullPath2))
+            {
+                System.IO.File.Delete(fullPath2);
+             }
+
+        }
     }
+    
 }
