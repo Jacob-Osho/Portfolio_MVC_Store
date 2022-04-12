@@ -72,5 +72,18 @@ namespace MVC_Store.Controllers
 
             return PartialView("_PagesMenuPartial", pagesVMList);
         }
+        public ActionResult SidebarPartial()
+        {
+            //обьявляем модлель
+            SideBarVM model;
+            //инициализируем модель данными
+            using (Db db = new Db())
+            {
+                SideBarDTO dto = db.Sidebras.Find(1);
+                model = new SideBarVM(dto);
+            }
+            // возвращаем модель в частичное представлении
+            return PartialView("_SidebarPartial",model);
+        }
     }
 }
