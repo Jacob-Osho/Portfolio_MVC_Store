@@ -15,5 +15,6 @@ namespace MVC_Store.Models.Data
         public DbSet<CategoryDTO> Categories { get; set; }
         //11
         public DbSet<ProductDTO> Products { get; set; }
+        public DbSet<EventDTO> Events { get; set; }
     }
 }

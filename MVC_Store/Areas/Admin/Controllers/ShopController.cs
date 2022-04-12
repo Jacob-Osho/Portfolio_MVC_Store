@@ -269,7 +269,7 @@ namespace MVC_Store.Areas.Admin.Controllers
 
                 // создаем и сохроняем уменьшенную копию
                 WebImage img = new WebImage(file.InputStream);
-                img.Resize(200, 200);
+                img.Resize(200, 200).Crop(1,1);
                 img.Save(path2);
             }
             #endregion
@@ -454,7 +454,7 @@ namespace MVC_Store.Areas.Admin.Controllers
 
                 // создаем и сохроняем уменьшенную копию
                 WebImage img = new WebImage(file.InputStream);
-                img.Resize(200, 200);
+                img.Resize(200, 200).Crop(1,1);
                 img.Save(path2);
 
             }
@@ -530,7 +530,7 @@ namespace MVC_Store.Areas.Admin.Controllers
                     // Сохроняем оригинальные и уменьшенные копии
                     WebImage img = new WebImage(file.InputStream);
                  
-                    img.Resize(200,200);
+                    img.Resize(200,200).Crop(1,1);
                     img.Save(path2);
                 }
             }

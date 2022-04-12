@@ -14,14 +14,14 @@ namespace MVC_Store.Models.ViewModels.Pages
         {
 
         }
-        public PageVM(PagesDTO pages)
+        public PageVM(PagesDTO row)
         {
-            Id = pages.Id;
-            Title = pages.Title;
-            Body = pages.Body;
-            Slug = pages.Slug;
-            Sorting = pages.Sorting;
-            HasSidebar = pages.HasSidebar;
+            Id = row.Id;
+            Title = row.Title;
+            Body = row.Body;
+            Slug = row.Slug;
+            Sorting = row.Sorting;
+            HasSidebar = row.HasSidebar;
 
         }
         public int Id { get; set; }

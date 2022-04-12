@@ -58,7 +58,7 @@
             @Html.LabelFor(model => model.ImageName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.ImageName, new { htmlAttributes = new { @class = "form-control" } })
-                @*<input style="margin-bottom: 10px;" type="file" name="file" id="imageUpload" />*@
+               
                 @if (@Model.ImageName != null)
                 {
 
@@ -163,11 +163,7 @@
                     $this.parent().parent().parent().fadeOut("slow");
                 });
             });
-
-
             /*-----------------------------------------------------------*/
-
-
         </script>
 
     }
