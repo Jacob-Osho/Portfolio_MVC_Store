@@ -1,4 +1,5 @@
 ﻿using MVC_Store.Models.Cart;
+using MVC_Store.Models.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace MVC_Store.Controllers
         public ActionResult Index()
         {
             // обьявляем лист типа карт  вью модел
-              var cart = Session["cart"] as List<CartVM> ?? new List<CartVM> ();
+            var cart = Session["cart"] as List<CartVM> ?? new List<CartVM>();
 
             // проверяем пуста ли карзина
             if (cart.Count == 0 || Session["cart"] == null)
@@ -23,19 +24,19 @@ namespace MVC_Store.Controllers
             }
             // если не пуста складываем сумму и передаем через вьюбег
             decimal total = 0m;
-            foreach(var item in cart)
+            foreach (var item in cart)
             {
-                total += item.Tottal;
-               
+                total += item.Total;
+
             }
             ViewBag.GrandTotal = total;
 
-            
+
             //возвращаем лист в представление
             return View(cart);
         }
 
-        //18
+        //20
         public ActionResult CartPartial()
         {
             //обьявляем модель  Карт ВМ
@@ -45,16 +46,19 @@ namespace MVC_Store.Controllers
             // обьявляем переменную цені
             decimal price = 0m;
             //Проверяем сессию
-            if(Session["cart"]!=null)
+            if (Session["cart"] != null)
             {
                 //Получаем общее количесто товаров и цену 
                 var list = (List<CartVM>)Session["cart"];
-                foreach(var item in list)
+                foreach (var item in list)
                 {
                     qty += item.Quantity;
                     price += item.Quantity * item.Price;
 
                 }
+
+                model.Quantity = qty;
+                model.Price = price;
             }
             else
             {
@@ -64,7 +68,76 @@ namespace MVC_Store.Controllers
             }
 
             // возвращаем частичное представление с моделью
-            return PartialView("_CartPartial",model);
+            return PartialView("_CartPartial", model);
+        }
+        //21
+        public ActionResult AddToCartPartial(int id)
+        {
+            // обьявляем лист карт вм
+            List<CartVM> cart =Session["cart"] as List<CartVM> ?? new List<CartVM>();
+            //обьявляем панель картвм
+            CartVM model = new CartVM();
+           
+            using(Db db = new Db())
+            {
+                //получить продукт по айди
+                ProductDTO product = db.Products.Find(id);
+                // проводим проверку есть ли такой товар уже  в карзине 
+                var productInCart = cart.FirstOrDefault(x => x.PorductId == id);
+                // если нет, то добовляем товар
+                if(productInCart == null)
+                {
+                    cart.Add(new CartVM()
+                    {
+                        PorductId = product.Id,
+                        ProductName = product.Name,
+                        Quantity =1,
+                        Price = product.Price,
+                        Image = product.ImageName
+                    });
+                }
+                else
+                {// если  да , то добовляем еще 1
+                    productInCart.Quantity++;
+                }
+                
+            }
+            // получаем общее количество,цену и  доволяем  в модель
+            int qty = 0;
+            decimal price = 0;
+            foreach(var item in cart)
+            {
+                qty += item.Quantity;
+                price += item.Quantity * item.Price;
+            }
+            model.Quantity = qty;
+            model.Price = price;
+
+            //сохраняем состояние карзины в сессию
+            Session["cart"] = cart;
+            //возвращаем частичное представление
+            return PartialView("_AddToCartPartial", model);
+        }
+        //21
+        // GET: /cart/IncrementProduct
+        public JsonResult IncrementProduct(int prudctId)
+        {
+            // обьявляем лист картVM
+            List<CartVM> cart = Session["cart"] as List<CartVM>;
+
+            using (Db db = new Db())
+            {
+                //получаем модель cartVM с листа картвм
+                CartVM model = cart.FirstOrDefault(x => x.PorductId == prudctId);
+                // добовляем кол-во
+                model.Quantity++;
+
+            //сохраняем необходимые данные
+            var result = new {qty = model.Quantity, price = model.Price};
+                //Вернуть  джейсон ответ с данными
+
+                return Json(result, JsonRequestBehavior.AllowGet); 
+            }
         }
     }
 }

@@ -11,7 +11,7 @@ namespace MVC_Store.Models.Cart
         public string ProductName { get; set; }
         public int Quantity { get; set; }
         public decimal Price { get; set; }
-        public decimal Tottal { get { return Quantity * Price; } }
+        public decimal Total { get { return Quantity * Price; } }
         public string Image { get; set; }
     }
 }

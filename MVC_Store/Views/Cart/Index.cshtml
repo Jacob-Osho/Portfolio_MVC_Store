@@ -6,80 +6,87 @@
 
 <h2>Cart Details:</h2>
 
-@if(ViewBag.Message != null)
+@if (ViewBag.Message != null)
 {
-            <h3>
-                @ViewBag.Message
-            </h3>
+    <h3>
+        @ViewBag.Message
+    </h3>
 }
 else
- {
+{
 
-            
 
-<table class="table">
-    <tr>
 
-        <th>
-            Name
-        </th>
-        <th>
-            Quantity
-        </th>
-        <th>
-            Price
-        </th>
-        <th>
-            Image
-        </th>
-        <th>
+    <table class="table">
+        <tr>
+
+            <th>
+                Name
+            </th>
+            <th>
+                Quantity
+            </th>
+            <th>
+                Price
+            </th>
+            <th>
+                Image
+            </th>
+            <th>
                 <!-- свободная ячейка для кнопок изменения кол-ва товаров-->
-        </th>
-        <th>
-            Tottal
-        </th>
+            </th>
+            <th>
+                Tottal
+            </th>
 
-        <th>
+            <th>
 
-        </th>
-    </tr>
+            </th>
+        </tr>
 
-@foreach (var item in Model) {
-<tr>
+        @foreach (var item in Model)
+        {
+            <tr>
 
-    <td>
-        @Html.DisplayFor(modelItem => item.ProductName)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Quantity)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Price)
-    </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductName)
+                </td>
+                <td class="qty@(item.PorductId)">
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)€
+                </td>
 
-    <td>
-        <img src="/Images/Uploads/Products/@item.PorductId/Thumbs/@item.Image"/>
-    </td>
-    <td>
-        <a href="#" class="incproduct" data-id="@item.PorductId">+</a>
-        <a href="#" class="decproduct" data-id="@item.PorductId">-</a>
-        <a href="#" class="removeproduct" data-id="@item.PorductId">Remove</a>
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Tottal) €
-    </td>
-    
-</tr>
+                <td>
+                    <img src="/Images/Uploads/Products/@item.PorductId/Thumbs/@item.Image" />
+                </td>
+                <td>
+                    <a href="#" class="incproduct" data-id="@item.PorductId">+</a>
+                    <a href="#" class="decproduct" data-id="@item.PorductId">-</a>
+                    <a href="#" class="removeproduct" data-id="@item.PorductId">Remove</a>
+                </td>
+                <td class="total@(item.PorductId)">
+                    @Html.DisplayFor(modelItem => item.Total)€
+                </td>
+
+            </tr>
+        }
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="grandtotal"><b>Grand total:</b> <span>@ViewBag.GrandTotal €</span></td>
+        </tr>
+
+    </table>
 }
-<tr>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td>@ViewBag.GrandTotal €</td>
-</tr>
 
-</table>
+@section Scripts
+{
+
+    <script src="~/Content/ShopJS/IncrementProductScript.js"></script>
 }
