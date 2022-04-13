@@ -17,15 +17,17 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
+                <ul class="navbar-nav" >
                     @Html.Action("PagesMenuPartial","Pages")
-
                 </ul>
+                <span class="navbar-text ">
+                    @Html.Action("CartPartial", "Cart")
+                </span>
             </div>
         </div>
     </nav>
    
-    <div class="container body-content">
+    <div class="container body-content" style="margin-top:30px">
         <div class="row">
             <!--18-->
             <div class="col-sm-12 col-md-3 list-group">

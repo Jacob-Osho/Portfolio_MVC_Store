@@ -135,11 +135,13 @@
     <Compile Include="Areas\Admin\Controllers\DashbordController.cs" />
     <Compile Include="Areas\Admin\Controllers\PagesController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopController.cs" />
+    <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\PagesController.cs" />
     <Compile Include="Controllers\ShopController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Cart\CartVM.cs" />
     <Compile Include="Models\Data\Db.cs" />
     <Compile Include="Models\Data\EventDTO.cs" />
     <Compile Include="Models\Data\PagesDTO.cs" />
@@ -1012,6 +1014,8 @@
     <Content Include="Views\Shop\_СategoryMenuPartial.cshtml" />
     <Content Include="Views\Shop\Сategory.cshtml" />
     <Content Include="Views\Shop\ProductDetails.cshtml" />
+    <Content Include="Views\Cart\_CartPartial.cshtml" />
+    <Content Include="Views\Cart\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
