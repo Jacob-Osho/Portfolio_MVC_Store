@@ -120,15 +120,15 @@ namespace MVC_Store.Controllers
         }
         //21
         // GET: /cart/IncrementProduct
-        public JsonResult IncrementProduct(int prudctId)
+        public JsonResult IncrementProduct(int productId)
         {
             // обьявляем лист картVM
             List<CartVM> cart = Session["cart"] as List<CartVM>;
 
             using (Db db = new Db())
             {
-                //получаем модель cartVM с листа картвм
-                CartVM model = cart.FirstOrDefault(x => x.PorductId == prudctId);
+                //получаем модель cartVM с ли ста картвм
+                CartVM model = cart.FirstOrDefault(x => x.PorductId == productId);
                 // добовляем кол-во
                 model.Quantity++;
 
