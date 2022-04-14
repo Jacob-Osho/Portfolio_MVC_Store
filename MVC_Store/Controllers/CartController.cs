@@ -139,5 +139,47 @@ namespace MVC_Store.Controllers
                 return Json(result, JsonRequestBehavior.AllowGet); 
             }
         }
+
+
+        public ActionResult DecrementProduct(int productId)
+        {
+            // обьявляем лист картVM
+            List<CartVM> cart = Session["cart"] as List<CartVM>;
+
+            using (Db db = new Db())
+            {
+                //получаем модель cartVM с ли ста картвм
+                CartVM model = cart.FirstOrDefault(x => x.PorductId == productId);
+                // отнимаем кол-во
+                if (model.Quantity > 1)
+                    model.Quantity--;
+                else
+                {
+                    model.Quantity = 0;
+                    cart.Remove(model);
+                }
+
+
+                //сохраняем необходимые данные
+                var result = new { qty = model.Quantity, price = model.Price };
+                //Вернуть  джейсон ответ с данными
+
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+        }
+        public void RemoveProduct(int productId)
+        {
+            // обьявляем лист картVM
+            List<CartVM> cart = Session["cart"] as List<CartVM>;
+
+            using (Db db = new Db())
+            {
+                //получаем модель cartVM с ли ста картвм
+                CartVM model = cart.FirstOrDefault(x => x.PorductId == productId);
+                // удаляем товар
+                cart.Remove(model);
+
+            }
+        }
     }
 }

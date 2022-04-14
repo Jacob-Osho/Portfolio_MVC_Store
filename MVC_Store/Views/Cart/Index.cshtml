@@ -62,9 +62,9 @@ else
                     <img src="/Images/Uploads/Products/@item.PorductId/Thumbs/@item.Image" />
                 </td>
                 <td>
-                    <a href="#" class="incproduct" data-id="@item.PorductId">+</a>
-                    <a href="#" class="decproduct" data-id="@item.PorductId">-</a>
-                    <a href="#" class="removeproduct" data-id="@item.PorductId">Remove</a>
+                    <a href="#" class="incproduct btn btn-success" data-id="@item.PorductId">+</a>
+                    <a href="#" class="decproduct btn btn-dark" data-id="@item.PorductId">-</a>
+                    <a href="#" class="removeproduct btn btn-danger" data-id="@item.PorductId">Remove</a>
                 </td>
                 <td class="total@(item.PorductId)">
                     @Html.DisplayFor(modelItem => item.Total)€

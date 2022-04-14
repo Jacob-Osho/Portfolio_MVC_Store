@@ -16,5 +16,8 @@ namespace MVC_Store.Models.Data
         //11
         public DbSet<ProductDTO> Products { get; set; }
         public DbSet<EventDTO> Events { get; set; }
+        //22
+        public DbSet<UserDTO> Users { get; set; }
+        public DbSet<RoleDTO> Roles { get; set; }
     }
 }
