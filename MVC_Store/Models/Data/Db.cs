@@ -18,6 +18,10 @@ namespace MVC_Store.Models.Data
         public DbSet<EventDTO> Events { get; set; }
         //22
         public DbSet<UserDTO> Users { get; set; }
+
         public DbSet<RoleDTO> Roles { get; set; }
+
+        //23
+        public DbSet<UserRoleDTO> UserRoles { get; set; }
     }
 }
