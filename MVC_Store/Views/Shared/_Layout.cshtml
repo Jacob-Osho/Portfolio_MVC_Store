@@ -17,45 +17,69 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarNav">
-                
+
                 <ul class="navbar-nav ">
                     @Html.Action("PagesMenuPartial", "Pages")
                     <!--24-->
-                    @if(Request.IsAuthenticated)
-                     {
+                    @if (Request.IsAuthenticated)
+                    {
                         <li>
-                            @Html.ActionLink("Logout", "Logout","Account",null,new {@class = "navbar-text",style ="text-decoration: none"})
+                            @Html.ActionLink("Logout", "Logout", "Account", null, new { @class = "navbar-text", style = "text-decoration: none" })
                         </li>
                     }
                     else
                     {
-                        if(ViewBag.Title == "Login")
+                        if (ViewBag.Title == "Login")
                         {
                             <li class="navbar-text">
-                                @Html.ActionLink("Login","Login","Account",null,new {@class ="active",style ="text-decoration: none"})
+                                @Html.ActionLink("Login", "Login", "Account", null, new { @class = "active", style = "text-decoration: none" })
                             </li>
                         }
                         else
                         {
-                           <li>
-                             @Html.ActionLink("Login", "Login", "Account", null, new { @class = "navbar-text", style = "text-decoration: none" })
-                          </li>
+                            <li>
+                                @Html.ActionLink("Login", "Login", "Account", null, new { @class = "navbar-text", style = "text-decoration: none" })
+                            </li>
                         }
                     }
+                    <!--25-->
+                    @if (Request.IsAuthenticated && User.IsInRole("User"))
+                    {
+                        if (ViewBag.Title == "User Profile")
+                        {
+                            <li class="active">
+                                @Html.Action("UserNavPartial", "Account", new { area = "" })
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
+                                @Html.Action("UserNavPartial", "Account", new { area = "" })
+                            </li>
+                        }
 
-                    @if(Request.IsAuthenticated)
-                     {
-                        <li>
-                            @Html.Action("UserNavPartial", "Account", new {area = ""}) <!--может біть  с _-->
-                        </li>
-                     }
+                    }
                     <!--*****-->
                 </ul>
-
-                    <span class="navbar-text"style=" margin-left: 20px" >
-                        @Html.Action("CartPartial", "Cart")
+                <!--25-->
+                @if (Request.IsAuthenticated && User.IsInRole("Admin"))
+                {
+                    <span class="navbar-text" style=" margin-left: 20px">
+                        @Html.ActionLink("Admin Area", "Index", "Dashbord", new { area = "Admin" }, null)
                     </span>
-                
+                }
+                else
+                {
+                    if (ViewBag.Title != "Cart Details")
+                    {
+                        <span class="navbar-text" style=" margin-left: 20px">
+                            @Html.Action("CartPartial", "Cart")
+                        </span>
+
+                    }
+                }
+
+
             </div>
         </div>
     </nav>
