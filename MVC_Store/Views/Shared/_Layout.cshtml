@@ -18,10 +18,41 @@
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 
-                    <ul class="navbar-nav">
-                        @Html.Action("PagesMenuPartial", "Pages")
-                    </ul>
-                    <span class="navbar-text" >
+                <ul class="navbar-nav ">
+                    @Html.Action("PagesMenuPartial", "Pages")
+                    <!--24-->
+                    @if(Request.IsAuthenticated)
+                     {
+                        <li>
+                            @Html.ActionLink("Logout", "Logout","Account",null,new {@class = "navbar-text",style ="text-decoration: none"})
+                        </li>
+                    }
+                    else
+                    {
+                        if(ViewBag.Title == "Login")
+                        {
+                            <li class="navbar-text">
+                                @Html.ActionLink("Login","Login","Account",null,new {@class ="active",style ="text-decoration: none"})
+                            </li>
+                        }
+                        else
+                        {
+                           <li>
+                             @Html.ActionLink("Login", "Login", "Account", null, new { @class = "navbar-text", style = "text-decoration: none" })
+                          </li>
+                        }
+                    }
+
+                    @if(Request.IsAuthenticated)
+                     {
+                        <li>
+                            @Html.Action("UserNavPartial", "Account", new {area = ""}) <!--может біть  с _-->
+                        </li>
+                     }
+                    <!--*****-->
+                </ul>
+
+                    <span class="navbar-text"style=" margin-left: 20px" >
                         @Html.Action("CartPartial", "Cart")
                     </span>
                 

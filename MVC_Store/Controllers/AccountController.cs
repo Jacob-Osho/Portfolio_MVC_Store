@@ -108,7 +108,7 @@ namespace MVC_Store.Controllers
                 if(db.Users.Any(x=>x.UserName.Equals(model.Username) && x.Password.Equals(model.Password)))
                 {
                     isValid = true;
-                    TempData["SM"] = "Succes";
+                   
                 }
                 if(!isValid)
                 {
@@ -125,34 +125,121 @@ namespace MVC_Store.Controllers
 
         
         //GET: /account/logout
-        public ActionResult Inde6x()
+        public ActionResult Logout()
         {
             FormsAuthentication.SignOut();
-            return RedirectToAction("Login ");
+            return RedirectToAction("Login");
         }
-        [DisplayName("user-profile")]
-        public ActionResult In4dex()
+        public ActionResult UserNavPartial()
         {
-            //
-            //
-            //
-            //
-            //
-            //
-            return View();
-        }
-   
-        public ActionResult Inde1x()
-        {
-            //
-            //
-            //
-            //
-            //
-            //
-            return View();
+            //  получаем имя пользователя
+            string userName = User.Identity.Name;
+            // обьявляем модель
+            UserNavPartialVM model;
+            using (Db db = new Db())
+            {
+                // получаем пользователя (User)
+                UserDTO dto = db.Users.FirstOrDefault(x => x.UserName == userName);
+
+                // заполняем модель данными с(контекста) дто
+                model = new UserNavPartialVM()
+                {
+                    FirstName = dto.FirstName,
+                    LastName = dto.LastName
+                };
+            }
+            // возвращаем частичное представление с моделью
+
+            return PartialView("_UserNavPartial", model);
         }
 
+        //GET: /account/user-profile
+        [HttpGet]
+        [ActionName("user-profile")]
+        public ActionResult UserProfile()
+        {
+            // Получаем имя пользователя
+            string userName =User.Identity.Name;
+            // Обьявляем модель
+            UserProfileVM model;
+            using(Db db =new Db())
+            {
+                // Получаем пользователя
+                UserDTO dto = db.Users.FirstOrDefault(x => x.UserName == userName);
+                // инициализируем модель данными
+                model = new UserProfileVM(dto);
+            }
+            //возвращаем модель представления
+            return View("UserProfile",model);
+        }
+   
+       
+        //GET: /account/user-profile
+        [HttpPost]
+        [ActionName("user-profile")]
+        public ActionResult UserProfile(UserProfileVM model)
+        {
+            bool userNameIsChanged = false;
+            // Проверяем модель на валидность
+            if(!ModelState.IsValid)
+            {
+                return View ("UserProfile",model);
+            }
+
+            // Прверяем пороль если пользователь его меняет  
+            if (!string.IsNullOrWhiteSpace(model.Password))
+            {
+                if (!model.Password.Equals(model.ConfirmPassword))
+                {
+                    ModelState.AddModelError("", "Passwords does not match");
+                    return View("UserProfile", model);
+                }
+            }
+            using (Db db=new Db())
+            {
+                
+                // получаем имя пользователя
+                string userName = User.Identity.Name;
+                // проверяем сменилось ли имя пользователя 
+                if(userName != model.UserName)
+                {
+                    userName = model.UserName;
+                    userNameIsChanged = true;
+                }
+                // Проверяем имя на уникальность
+                if (db.Users.Where(x => x.Id != model.Id).Any(x => x.UserName == userName))
+                {
+                    ModelState.AddModelError("", $"Username {model.UserName} alreay taken");
+                    model.UserName = "";
+                    return View("UserProfile", model);
+                }
+                // изменяем контектст данніх ( дто)
+                UserDTO dto = db.Users.Find(model.Id);
+                dto.FirstName=model.FirstName;
+                dto.LastName=model.LastName;
+                dto.EmailAdress = model.EmailAdress;
+                dto.UserName = model.UserName;
+                if(!string.IsNullOrWhiteSpace(model.Password))
+                {
+                    dto.Password = model.Password;
+                }
+                
+                // сохроняем изменения
+                db.SaveChanges();
+            }
+
+            // устанавливаем сообщение  в темп дата
+            TempData["SM"] = "your profile has been successfully updated";
+
+            if (!userNameIsChanged)
+            {
+                //  Возвращаем представление с моделью
+                return View("UserProfile", model);
+            }
+            else
+                return RedirectToAction("Logout");
+            
+        }
         public ActionResult Inde62x()
         {
             //
