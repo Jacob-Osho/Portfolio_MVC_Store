@@ -1,5 +1,6 @@
 ﻿using MVC_Store.Models.Data;
 using MVC_Store.Models.ViewModels.Account;
+using MVC_Store.Models.ViewModels.Shop;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -125,11 +126,13 @@ namespace MVC_Store.Controllers
 
         
         //GET: /account/logout
+        [Authorize]
         public ActionResult Logout()
         {
             FormsAuthentication.SignOut();
             return RedirectToAction("Login");
         }
+        [Authorize]
         public ActionResult UserNavPartial()
         {
             //  получаем имя пользователя
@@ -154,6 +157,7 @@ namespace MVC_Store.Controllers
         }
 
         //GET: /account/user-profile
+        [Authorize]
         [HttpGet]
         [ActionName("user-profile")]
         public ActionResult UserProfile()
@@ -175,6 +179,7 @@ namespace MVC_Store.Controllers
    
        
         //GET: /account/user-profile
+        [Authorize]
         [HttpPost]
         [ActionName("user-profile")]
         public ActionResult UserProfile(UserProfileVM model)
@@ -240,15 +245,68 @@ namespace MVC_Store.Controllers
                 return RedirectToAction("Logout");
             
         }
-        public ActionResult Inde62x()
+        //27
+        //GET: /account/Orders
+        [Authorize(Roles ="User")]
+        public ActionResult Orders()
         {
-            //
-            //
-            //
-            //
-            //
-            //
-            return View();
+            // Инициализируем модель ордерсфорюзерсВМ
+            List<OrdersForUserVM> ordersForUsersModel = new List<OrdersForUserVM>();
+
+            using(Db db = new Db())
+            {
+
+
+                // Получаем Айдипользователя
+                UserDTO user = db.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
+                int userId = user.Id;
+
+                // Инициализируем модель ОрдерВМ
+                List<OrderVM> orders = db.Orders
+                    .Where(x => x.UserId == userId)
+                    .ToArray()
+                    .Select(x=> new OrderVM(x))
+                    .ToList();
+                // Перебираем список товаров ОрдерВМ
+                foreach (var order in orders)
+                {
+                    // Инициализируем словрь товаров
+                    Dictionary<string,int> productsAndQty = new Dictionary<string, int>();
+
+                    // обьявляем переменную конечной суммы
+                    decimal total = 0m;
+
+                // инициализируем модель ордердетейлсДТО
+                List<OrderDetailsDTO> orderDetailsDTO = db.OrderDetails.Where(x=> x.OrderId==order.OrderId).ToList();
+
+                    // Перебираем список ордердетейлсДТО
+                    foreach (var orderDetails in orderDetailsDTO)
+                    {
+                        // ПОлучаем   товар
+                        ProductDTO productDTO = db.Products.FirstOrDefault(x=>x.Id == orderDetails.ProductId);
+                        // ПОлучаем  имя товара
+                        string prodcutName = productDTO.Name;
+                        // получаем цену товара
+                        decimal price = productDTO.Price;
+
+                        // добовляем товар в словарь
+                        productsAndQty.Add(prodcutName, orderDetails.Quantity);
+                        // получаем конечную стоимость товаров
+                        total += price * orderDetails.Quantity;
+                    }
+
+                    // добовляем полученные данные в модель ордерсфорюзерсВМ
+                    ordersForUsersModel.Add(new OrdersForUserVM()
+                    {
+                        OrderNumber =order.OrderId,
+                        ProductsAndQty = productsAndQty,
+                        Total = total,
+                        CreatedAt =order.CreatedAt
+                    });
+                }
+            }
+            // возвращаем возвращаение с моделью
+            return View(ordersForUsersModel);
         }
     }
 }

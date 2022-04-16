@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace MVC_Store.Areas.Admin.Controllers
 {
+    [Authorize(Roles ="Admin")]//  Доступ только у админов
     public class DashbordController : Controller
     {
         // GET: Admin/Dashboard
