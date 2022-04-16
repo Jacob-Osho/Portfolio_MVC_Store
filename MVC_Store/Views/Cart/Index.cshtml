@@ -90,6 +90,8 @@ else
         </tr>
 
     </table>
+    <!--26-->
+    <div class="paypaldiv">
     <!--25-->
     <form class="paypalform" action="https://www.sandbox.paypal.com/us/cgi-bin/webscr" method="post">
         <input type="hidden" name="cmd" value="_cart">
@@ -105,11 +107,13 @@ else
         }
 
         <input type="hidden" name="currency_code" value="EUR">
-        <!--<input type="image" src="http://www.paypal.com/en_US/i/btn/x-click-but01.gif" name="submit" alt="Make payments with PayPal - it's fast, free and secure!">-->
+        <div style="display:none">
+            <input type="image" src="http://www.paypal.com/en_US/i/btn/x-click-but01.gif" name="submit" alt="Make payments with PayPal - it's fast, free and secure!">
+        </div>
     </form>
-
+    </div>
     <br />
-    <a href="#" class="btn btn-primary float-end">Checkout</a>//  float-right
+    <a href="#" class="placeorder btn btn-primary float-end">Checkout</a>
 }
 
 @section Scripts

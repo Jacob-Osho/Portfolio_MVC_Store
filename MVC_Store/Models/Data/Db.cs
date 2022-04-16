@@ -23,7 +23,7 @@ namespace MVC_Store.Models.Data
 
         //23
         public DbSet<UserRoleDTO> UserRoles { get; set; }
-        public DbSet<OrderDTO> Order { get; set; }
+        public DbSet<OrderDTO> Orders { get; set; }
         public DbSet<OrderDetailsDTO> OrderDetails { get; set; }
     }
 }

@@ -3,6 +3,8 @@ using MVC_Store.Models.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
 
@@ -180,6 +182,70 @@ namespace MVC_Store.Controllers
                 cart.Remove(model);
 
             }
+        }
+
+        //26
+        public ActionResult PaypalPartial()
+        {
+            //  Получить лист товаров в карзине
+            List<CartVM> cart = Session["cart"] as List<CartVM>;
+
+            // Вернуть частичное предсталвение вместе  с листом
+            return PartialView(cart);
+        }
+        //26
+        //POST: /cart/PlaceOrder
+        [HttpPost]
+        public void PlaceOrder()
+        {
+            //  Получить лист товаров в карзине
+            List<CartVM> cart = Session["cart"] as List<CartVM>;
+            // получаем имя пользователя
+            string userName = User.Identity.Name;
+            // инициализируем(обьявляем переменную для ) ордер айди
+            int orderId=0;
+           
+            using(Db db = new Db())
+            {
+                // обьявляем модель Ордер ДТО
+                OrderDTO orderDTO = new OrderDTO();
+                // получаем айди пользователя
+                var  q =db.Users.FirstOrDefault(x=>x.UserName == userName);
+                int userId = q.Id;
+
+                // заполняем модель ордерДТО данными и сохроняем ее
+                orderDTO.UserId = userId;
+                orderDTO.CreatedAt = DateTime.Now;
+                db.Orders.Add(orderDTO);
+                db.SaveChanges();
+
+                // получаем айди заказа(ордерайди)
+                orderId =orderDTO.OrderId;
+                // Обьявляем модель Ордер детейлс ДТО
+                OrderDetailsDTO orderDetailsDTO = new OrderDetailsDTO();
+                // Добовляем  в  модель данные
+                foreach(var item in cart)
+                {
+                    orderDetailsDTO.OrderId = orderId;
+                    orderDetailsDTO.UserId = userId;
+                    orderDetailsDTO.ProductId = item.PorductId;
+                    orderDetailsDTO.Quantity = item.Quantity;
+
+                    db.OrderDetails.Add(orderDetailsDTO);
+                    db.SaveChanges();
+                }
+            }
+            //отправляем письмо на почту админа
+            var client = new SmtpClient("smtp.mailtrap.io", 2525) //https://mailtrap.io
+            {
+                Credentials = new NetworkCredential("15df138a164f34", "ac8d7851893e81"),
+                EnableSsl = true
+            };
+            client.Send("shop@example.com", "admin@example.com", "New Order", $"you have new order. Order number: {orderId}");
+            //обнуляем сессию(обязательное условие для пейпала)
+            Session["cart"] = null;
+           
+           
         }
     }
 }
