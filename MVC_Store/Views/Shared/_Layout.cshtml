@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Tattoo Inka Osa</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top js">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Tattoo Inka Osa</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+
+                <ul class="navbar-nav ">
+                    @Html.Action("PagesMenuPartial", "Pages")
+                    <!--24-->
+                    @if (Request.IsAuthenticated)
+                    {
+                        <li>
+                            @Html.ActionLink("Logout", "Logout", "Account", null, new { @class = "navbar-text", style = "text-decoration: none" })
+                        </li>
+                    }
+                    else
+                    {
+                        if (ViewBag.Title == "Login")
+                        {
+                            <li class="navbar-text">
+                                @Html.ActionLink("Login", "Login", "Account", null, new { @class = "active", style = "text-decoration: none" })
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
+                                @Html.ActionLink("Login", "Login", "Account", null, new { @class = "navbar-text", style = "text-decoration: none" })
+                            </li>
+                        }
+                    }
+                    <!--25-->
+                    @if (Request.IsAuthenticated && User.IsInRole("User"))
+                    {
+                        if (ViewBag.Title == "User Profile")
+                        {
+                            <li class="active">
+                                @Html.Action("UserNavPartial", "Account", new { area = "" })
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
+                                @Html.Action("UserNavPartial", "Account", new { area = "" })
+                            </li>
+                        }
+
+                    }
+                    <!--*****-->
+                </ul>
+                <!--25-->
+                @if (Request.IsAuthenticated && User.IsInRole("Admin"))
+                {
+                    <span class="navbar-text" style=" margin-left: 20px">
+                        @Html.ActionLink("Admin Area", "Index", "Dashbord", new { area = "Admin" }, null)
+                    </span>
+                }
+                else
+                {
+                    if (ViewBag.Title != "Cart Details")
+                    {
+                        <span class="navbar-text" style=" margin-left: 20px">
+                            @Html.Action("CartPartial", "Cart")
+                        </span>
+
+                    }
+                }
+
+
+            </div>
+        </div>
+    </nav>
+   
+    <div class="container body-content" style="margin-top:30px">
+        <div class="row">
+            <!--18-->
+            <div class="col-sm-12 col-md-3 list-group">
+                @Html.Action("СategoryMenuPartial","Shop")
+             </div>
+             
+                <!--********-->
+
+            @if (ViewBag.Sidebar == "Yes")
+            {
+                <div class="col">
+                    @RenderBody()
+                </div>
+                <div class="col-sm-12 col-md-3">
+                    @Html.Action("SidebarPartial", "Pages")
+                </div>
+            }
+            else
+            {
+                <div class="col">
+                    @RenderBody()
+                </div>
+            }   
+        </div>
+
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Tattoo Inka Osa</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/scripts")
+    @Scripts.Render("~/Scripts/bootstrap.js")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
